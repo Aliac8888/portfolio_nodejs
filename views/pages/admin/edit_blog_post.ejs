@@ -9,9 +9,7 @@
 
 <body>
     <h1>Edit Blog Post</h1>
-    <form action="/admin/edit-blog-post/<%= blogPost._id %>" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-
+    <form action="/admin/edit-blog-post/<%= blogPost._id %>?_csrf=<%= csrfToken %>" method="POST" enctype="multipart/form-data">
         <label for="title">Title:</label>
         <input type="text" name="title" id="title" value="<%= blogPost.title %>" required><br>
 
@@ -19,7 +17,7 @@
         <select name="category" id="category" required>
             <% categories.forEach(category=> { %>
                 <option <%= blogPost.category.toString() === category._id.toString() ? 'selected' : '' %> ><%= category.name %> value="<%= category._id %>">
-                </option> 
+                </option>
             <% }) %>
         </select><br>
 

@@ -8,9 +8,9 @@ const User = require("../models/User");
 
 router.get("/", async (req, res, next) => {
   try {
-    usersCount = await User.countDocuments();
-    blogPostsCount = await BlogPost.countDocuments();
-    blogCategoriesCount = await BlogCategory.countDocuments();
+    const usersCount = await User.countDocuments();
+    const blogPostsCount = await BlogPost.countDocuments();
+    const blogCategoriesCount = await BlogCategory.countDocuments();
     res.render("pages/admin/dashboard", {
       title: "Dashboard",
       usersCount,
@@ -25,10 +25,10 @@ router.get("/", async (req, res, next) => {
 
 router.get("/user-management", async (req, res, next) => {
   try {
-    users = await User.find();
+    const users = await User.find();
     res.render("pages/admin/users", {
       title: "User Management",
-      usersCount,
+      users,
     });
   } catch (err) {
     console.log(err);

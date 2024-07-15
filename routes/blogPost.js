@@ -4,7 +4,7 @@ const BlogPost = require("../models/BlogPost");
 const BlogCategory = require("../models/BlogCategory");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
-const upload = require('../config/multerConfig');  // Import the multer configuration
+const upload = require('../config/multerconfig');  // Import the multer configuration
 
 
 

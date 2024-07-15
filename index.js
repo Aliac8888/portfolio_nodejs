@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const csrf = require("csurf");
-const upload = require('./config/multerConfig');  // Import the multer configuration
+const upload = require('./config/multerconfig');  // Import the multer configuration
 
 
 const app = express();
@@ -53,6 +53,10 @@ mongoose
   .connect("mongodb://127.0.0.1:27017/portfolio", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    auth: {
+      username: 'root',
+      password: 'root',
+    },
   })
   .then(() => {
     console.log("Connected successfully to MongoDB");
