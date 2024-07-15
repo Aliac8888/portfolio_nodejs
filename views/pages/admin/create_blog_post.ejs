@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- HEADER -->
+<%- include('./partials/header') %>
+
+    <body class="flex">
+        <!-- sidebar -->
+        <%- include('./partials/sidebar') %>
+            <!-- main content -->
+            <div class="flex-1 p-6">
+                <!-- NAVBAR -->
+                <%- include('./partials/navbar',{currentPage:title}) %>
+                    <form action="/admin/create-blog-post" method="post" enctype="multipart/form-data" id="fffff">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                        <div class="space-y-12">
+                            <div class="border-b border-gray-900/10 pb-4">
+                                <h2 class="text-lg font-bold leading-7 text-gray-900">New Blog Post</h2>
+                                <div class="mt-10 grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-8" id="input-container">
+                                    <div class="md:col-span-3">
+                                        <label for="title"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Title</label>
+                                        <div class="mt-2">
+                                            <input type="text" name="title" id="title" placeholder="Title of Blog Post"
+                                                autocomplete="title" required
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="category"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Category</label>
+                                        <div class="mt-2">
+                                            <select type="text" name="category" id="category" required
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                                <option value="none">No Category Selected</option>
+                                                <% categories.forEach(category=> { %>
+                                                    <option value="<%= category._id %>">
+                                                        <%= category.name %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="templateImage"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Cover photo</label>
+                                        <div class="mt-2">
+                                            <input type="file" name="title" id="templateImage"
+                                                autocomplete="templateImage" required
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700 sm:text-sm sm:leading-6">
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                </div>
+
+                                <div class="my-5">
+                                    <button class="rounded-md bg-green-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-green-400" type="button" onclick="addContentItemTypeText()">Add Text Content</button>
+                                    <button class="rounded-md bg-yellow-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-yellow-400" type="button" onclick="addContentItemTypeImage()">Add Image Content</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex items-center justify-end gap-x-6">
+                            <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+                            <button type="submit"
+                                class="rounded-md bg-blue-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Create</button>
+                        </div>
+                    </form>
+            </div>
+            <script>
+                function addContentItemTypeText() {
+                    const container = document.getElementById('input-container');
+                    const contentItem = document.createElement('div');
+                    contentItem.classList.add("md:col-span-3");
+                    contentItem.innerHTML = `
+                        <div>
+                            <input value="text" type="hidden" name="content[][type]">
+                            <label class="block text-lg font-medium leading-6 text-gray-900">Content Data
+                                <textarea name="content[][data]" rows="3" required
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
+                                    focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"></textarea>
+                            </label>
+                        <div>
+                        <div>
+                            <label class="block text-lg font-medium leading-6 text-gray-900">Priority
+                                <input type="number" name="content[][priority]" placeholder="Priority of Content" min="0" required
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 
+                                    placeholder:text-gray-400 focus:ring-2
+                                    focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                            </label>
+                        </div>
+                    `;
+                    container.appendChild(contentItem);
+                }
+
+                function addContentItemTypeImage() {
+                    const container = document.getElementById('input-container');
+                    const contentItem = document.createElement('div');
+                    contentItem.classList.add("md:col-span-3");
+                    contentItem.innerHTML = `
+                        <div>
+                            <input value="image" type="hidden" name="content[][type]">
+                            <label class="block text-lg font-medium leading-6 text-gray-900">Content Data
+                                <input type="file" name="content[][data]" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
+                                placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700 sm:text-sm sm:leading-6">
+                            </label>
+                        </div>
+                        <div>
+                            <label class="block text-lg font-medium leading-6 text-gray-900">Priority
+                                <input type="number" name="content[][priority]" placeholder="Priority of Content" min="0" required
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
+                                    placeholder:text-gray-400 focus:ring-2
+                                    focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                            </label>
+                        </div>
+                    `;
+                    container.appendChild(contentItem);
+                    }
+
+                // function getFormBody() {
+                //     var formEl = document.forms.fffff;
+                //     var formData = new FormData(formEl);
+                //     // Display the values
+                //     for (const value of formData.values()) {
+                //         console.log(value);
+                //     }
+                //     }
+            </script>
+    </body>
+
+</html>

@@ -1,0 +1,44 @@
+<html lang="en" class="min-h-screen bg-night">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%- title %></title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/background_animation.css">
+</head>
+
+<body class="min-h-screen">
+    <div class="min-h-screen">
+        <!--Start Of Background Animation Body-->
+        <%- include('../../common/box_animation'); -%>
+            <!--End Of Background Animation Body-->
+            <!--header-->
+            <%- include('../../common/header'); -%>
+                <!--header-->
+                <div class="w-full h-screen relative z-10">
+                    <div class="w-full h-screen flex flex-col items-center justify-center">
+                        <div class="w-full h-72 mt-12" style="background-image:url('/assets/img/404.png'); 
+                                                     background-position: center; 
+                                                     background-size: contain; 
+                                                     background-repeat: no-repeat;">
+                        </div>
+                        <div class="flex flex-col items-center justify-center">
+                            <p class="text-3xl md:text-4xl lg:text-5xl text-white mt-8">Page Not Found</p>
+                            <p class="md:text-lg lg:text-xl text-gray-400 mt-8">The page you are looking couldn't be found</p>
+                            <a href="/"
+                                class="flex items-center space-x-2 bg-dark-blue hover:bg-dark-blue-light text-white px-4 py-2 mt-12 rounded transition duration-150"
+                                title="Return Home">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                <span>Return home</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+</body>
+
+</html>

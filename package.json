@@ -1,0 +1,38 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "my personal website/portfolio",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "tailwind:css": "postcss public/assets/css/tailwind.css -o public/assets/css/style.css",
+    "tailwind:css-watch": "npx tailwindcss -i public/assets/css/tailwind.css -o public/assets/css/style.css --watch"
+  },
+  "author": "AliAc",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.4.19",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.6",
+    "csurf": "^1.11.0",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "express-validator": "^7.1.0",
+    "flowbite": "^2.4.1",
+    "mongoose": "^8.4.4",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.0",
+    "sweetalert2": "^11.12.1",
+    "tailwindcss": "^3.4.4"
+  },
+  "devDependencies": {
+    "flowbite-typography": "^1.0.3",
+    "nodemon": "^3.1.4"
+  }
+}

@@ -1,0 +1,53 @@
+<header class="absolute inset-x-0 top-0 z-50">
+    <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+        <div class="flex lg:flex-1">
+            <a href="#" class="-m-1.5 p-1.5">
+                <span class="sr-only">A+A</span>
+                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
+            </a>
+        </div>
+        <div class="flex lg:hidden">
+            <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                <span class="sr-only">Open main menu</span>
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+        <div class="hidden lg:flex lg:gap-x-12">
+            <a href="/" class="text-lg font-semibold leading-6 text-white hover:text-dark-blue">Home</a>
+            <a href="#" class="text-lg font-semibold leading-6 text-white hover:text-dark-blue">About Me</a>
+            <a href="/resume" class="text-lg font-semibold leading-6 text-white hover:text-dark-blue">Resume</a>
+            <a href="/blogs" class="text-lg font-semibold leading-6 text-white hover:text-dark-blue">Blog</a>
+        </div>
+        <% if(typeof user != 'undefined' && user){ %>
+            <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+                <a href="/admin" class="mr-3 rounded-md bg-dark-blue 
+                px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
+              hover:bg-dark-blue-light focus-visible:outline 
+                focus-visible:outline-2 focus-visible:outline-offset-2
+              focus-visible:bg-dark-blue-light">Dashboard</a>
+                <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit()" class="rounded-md bg-red-700
+                     px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
+                     hover:bg-red-600 focus-visible:outline
+                     focus-visible:outline-2 focus-visible:outline-offset-2
+                     focus-visible:bg-dark-blue-light">Logout</a>
+                <form action="/logout" method="post">
+                    <!-- CSRF TOKEN -->
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <!-- CSRF TOKEN -->
+                </form>
+            </div>
+            <% }else{ %>
+                <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+                    <a href="/login" class="rounded-md bg-dark-blue
+                     px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
+                 hover:bg-dark-blue-light focus-visible:outline 
+                    focus-visible:outline-2 focus-visible:outline-offset-2
+                focus-visible:bg-dark-blue-light">Log in</a>
+                </div>
+                <% } %>
+    </nav>
+</header>

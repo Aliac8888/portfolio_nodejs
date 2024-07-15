@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" class="min-h-screen bg-night">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <%= title %>
+  </title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/background_animation.css">
+</head>
+
+<body class="min-h-screen">
+  <div class="min-h-screen">
+    <!--Start Of Background Animation Body-->
+    <%- include('../common/box_animation'); -%>
+      <!--End Of Background Animation Body-->
+      <!--header-->
+      <%- include('../common/header'); -%>
+        <!--header-->
+        <div class="relative z-10 isolate px-6 pt-14 lg:px-8">
+          <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+            <div class="text-center">
+              <h1 id="my-name" class="text-4xl font-bold tracking-tight text-dark-blue sm:text-6xl">Hey There, It's Ali
+                Mehdizadeh</h1>
+              <p class="mt-6 text-lg leading-8 text-white">
+                I'm a software engineer. I love spending my time creating and developing new things related to this
+                industry which that can be
+                website, application or just maintaining my previous projects.
+              </p>
+              <div class="mt-10 flex items-center justify-center gap-x-6">
+                <a href="#"
+                  class="rounded-md bg-dark-blue px-3.5 py-2.5 text-sm
+                   font-semibold text-white shadow-sm
+                    hover:bg-dark-blue-light focus-visible:outline 
+                    focus-visible:outline-2 focus-visible:outline-offset-2
+                     focus-visible:bg-dark-blue-light ">About Me</a>
+                <a href="#" class="text-sm font-semibold leading-6 text-white">Learn more <span
+                    aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+  <script>
+    function consoleText(words, id, colors) {
+      if (colors === undefined) colors = ['#003285'];
+      var visible = true;
+      var con = document.getElementById('console');
+      var letterCount = 1;
+      var x = 1;
+      var waiting = false;
+      var target = document.getElementById(id);
+      target.setAttribute('style', 'color:' + colors[0])
+      window.setInterval(function () {
+
+        if (letterCount === 0 && waiting === false) {
+          waiting = true;
+          target.innerHTML = words[0].substring(0, letterCount)
+          window.setTimeout(function () {
+            var usedColor = colors.shift();
+            colors.push(usedColor);
+            var usedWord = words.shift();
+            words.push(usedWord);
+            x = 1;
+            target.setAttribute('style', 'color:' + colors[0])
+            letterCount += x;
+            waiting = false;
+          }, 1000)
+        } else if (letterCount === words[0].length + 1 && waiting === false) {
+          waiting = true;
+          window.setTimeout(function () {
+            x = -1;
+            letterCount += x;
+            waiting = false;
+          }, 1000)
+        } else if (waiting === false) {
+          target.innerHTML = words[0].substring(0, letterCount)
+          letterCount += x;
+        }
+      }, 120)
+      window.setInterval(function () {
+        if (visible === true) {
+          // con.className = 'opacity-0'
+          visible = false;
+
+        } else {
+          visible = true;
+        }
+      }, 400)
+    }
+    consoleText(
+      ["Hey There, It's Ali Mehdizadeh", "I'm A Software Engineer"],
+      'my-name',
+      ['#003285']
+    );
+  </script>
+</body>
+
+</html>
