@@ -53,6 +53,10 @@ mongoose
   .connect("mongodb://127.0.0.1:27017/portfolio", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    auth: {
+      username: 'root',
+      password: 'root',
+    },
   })
   .then(() => {
     console.log("Connected successfully to MongoDB");
