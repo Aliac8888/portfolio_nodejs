@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const csrf = require("csurf");
-const upload = require('./config/multerConfig');  // Import the multer configuration
+const upload = require('./config/multerconfig');  // Import the multer configuration
 
 
 const app = express();
