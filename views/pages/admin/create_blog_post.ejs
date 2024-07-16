@@ -11,7 +11,8 @@
             <div class="flex-1 p-6">
                 <!-- NAVBAR -->
                 <%- include('./partials/navbar',{currentPage:title}) %>
-                    <form action="/admin/create-blog-post?_csrf=<%= csrfToken %>" method="post" enctype="multipart/form-data" id="fffff">
+                    <form action="/admin/create-blog-post?_csrf=<%= csrfToken %>" method="post"
+                        enctype="multipart/form-data" id="fffff">
                         <div class="space-y-12">
                             <div class="border-b border-gray-900/10 pb-4">
                                 <h2 class="text-lg font-bold leading-7 text-gray-900">New Blog Post</h2>
@@ -22,6 +23,17 @@
                                         <div class="mt-2">
                                             <input type="text" name="title" id="title" placeholder="Title of Blog Post"
                                                 autocomplete="title" required
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="slug" class="block text-lg font-medium leading-6 text-gray-900">Slug
+                                            (Must be
+                                            Unique)</label>
+                                        <div class="mt-2">
+                                            <input type="text" name="slug" id="slug" placeholder="Title of Blog Post"
+                                                autocomplete="slug" required
                                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
                                         </div>
                                     </div>
@@ -43,21 +55,44 @@
                                     </div>
                                     <div class="md:col-span-3"></div>
                                     <div class="md:col-span-3">
-                                        <label for="templateImage"
-                                            class="block text-lg font-medium leading-6 text-gray-900">Cover photo</label>
+                                        <label for="visible"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Visibility</label>
                                         <div class="mt-2">
-                                            <input type="file" name="title" id="templateImage"
+                                            <select type="text" name="visible" id="visible" required
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                                <option value="0">Hidden</option>
+                                                <option value="1">Shown</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="description" class="block text-lg font-medium leading-6 text-gray-900">Content Data</label>
+                                        <textarea id="description" name="description" rows="3" required
+                                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
+                                            focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"></textarea>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="templateImage"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Cover
+                                            photo</label>
+                                        <div class="mt-2">
+                                            <input type="file" name="templateImage" id="templateImage"
                                                 autocomplete="templateImage" required
                                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700 sm:text-sm sm:leading-6">
                                         </div>
                                     </div>
                                     <div class="md:col-span-3"></div>
                                 </div>
-
-                                <div class="my-5">
-                                    <button class="rounded-md bg-green-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-green-400" type="button" onclick="addContentItemTypeText()">Add Text Content</button>
-                                    <button class="rounded-md bg-yellow-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-yellow-400" type="button" onclick="addContentItemTypeImage()">Add Image Content</button>
-                                </div>
+                            </div>
+                            <div class="my-5">
+                                <button
+                                    class="rounded-md bg-green-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-green-400"
+                                    type="button" onclick="addContentItemTypeText()">Add Text Content</button>
+                                <button
+                                    class="rounded-md bg-yellow-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-yellow-400"
+                                    type="button" onclick="addContentItemTypeImage()">Add Image Content</button>
                             </div>
                         </div>
 
@@ -102,7 +137,7 @@
                         <div>
                             <input value="image" type="hidden" name="content[][type]">
                             <label class="block text-lg font-medium leading-6 text-gray-900">Content Data
-                                <input type="file" name="content[][data]" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
+                                <input type="file" name="content[][data]" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
                                 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700 sm:text-sm sm:leading-6">
                             </label>
                         </div>
@@ -116,7 +151,7 @@
                         </div>
                     `;
                     container.appendChild(contentItem);
-                    }
+                }
 
                 // function getFormBody() {
                 //     var formEl = document.forms.fffff;
@@ -126,6 +161,17 @@
                 //         console.log(value);
                 //     }
                 //     }
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script type="text/javascript">
+                "<% if(messages.error?.length > 0){ %>"
+                Swal.fire({
+                    title: 'Error!',
+                    text: "<%- messages.error[0] %>",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                "<% } %>"
             </script>
     </body>
 

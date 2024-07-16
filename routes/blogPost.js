@@ -4,9 +4,7 @@ const BlogPost = require("../models/BlogPost");
 const BlogCategory = require("../models/BlogCategory");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
-const upload = require('../config/multerconfig');  // Import the multer configuration
-
-
+const upload = require("../config/multerconfig"); // Import the multer configuration
 
 // Read all blog posts
 router.get("/blogs", async (req, res) => {
@@ -62,6 +60,8 @@ router.post(
   ]),
   [
     body("title").notEmpty().withMessage("Title is required").trim(),
+    body("slug").notEmpty().withMessage("Slug is required").trim(),
+    body("visible").notEmpty().withMessage("Visibility is required").trim(),
     body("category")
       .notEmpty()
       .withMessage("Category is required")
@@ -81,19 +81,50 @@ router.post(
     }
 
     try {
-      const { title, category } = req.body;
-      // This should be an array of content items
-      const contentArray = req.body.content.map((item, index) => ({
-        type: item.type,
-        data:
-          item.type === "image"
-            ? req.files["content[][data]"][index].path
-            : item.data,
-        priority: item.priority,
-      }));
+      const { title, category, slug, visible, description } = req.body;
+      // Reconstruct content array
+      const contentArray = [];
+      const contentTypes = Array.isArray(req.body["content[][type]"])
+        ? req.body["content[][type]"]
+        : [req.body["content[][type]"]];
+      const contentData = Array.isArray(req.body["content[][data]"])
+        ? req.body["content[][data]"]
+        : [req.body["content[][data]"]];
+      const contentPriorities = Array.isArray(req.body["content[][priority]"])
+        ? req.body["content[][priority]"]
+        : [req.body["content[][priority]"]];
+
+      let imageIndex = 0;
+      let contentIndex = 0;
+
+      for (let i = 0; i < contentTypes.length; i++) {
+        let data;
+        if (contentTypes[i] === "image") {
+          if (
+            req.files["content[][data]"] &&
+            req.files["content[][data]"][imageIndex]
+          ) {
+            data = req.files["content[][data]"][imageIndex].path;
+            imageIndex++;
+          } else {
+            throw new Error("Image file is missing for some content item");
+          }
+        } else {
+          data = contentData[contentIndex];
+          contentIndex++;
+        }
+        contentArray.push({
+          type: contentTypes[i],
+          data: data,
+          priority: contentPriorities[i],
+        });
+      }
 
       const blogPost = new BlogPost({
         title: title,
+        slug: slug,
+        description: description,
+        visible: visible,
         content: contentArray,
         templateImage: req.files.templateImage
           ? `/uploads/${req.files.templateImage[0].filename}`
@@ -108,7 +139,7 @@ router.post(
       console.log(err);
       const categories = await BlogCategory.find();
       res.render("pages/admin/create_blog_post", {
-        errors: [err.message],
+        messages: { error: [err.message] },
         title: "Create Blog Post",
         categories,
         csrfToken: req.csrfToken(),

@@ -21,6 +21,16 @@ const blogPostSchema = new Schema({
   title: {
     type: String,
     required: true,
+  },  
+  description: {
+    type: String,
+    required: true,
+  },
+  slug: {
+    type: String,
+    required: true,
+    unique: true,
+    dropDups: true,
   },
   content: {
     type: [contentSchema],
@@ -28,6 +38,10 @@ const blogPostSchema = new Schema({
   },
   templateImage: {
     type: String, // URL or path to the template image
+  },
+  visible: {
+    type: Boolean,
+    default: true,
   },
   author: {
     type: Schema.Types.ObjectId,

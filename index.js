@@ -16,7 +16,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
-app.use(bodyParser.urlencoded({ extended: false })); // To parse URL-encoded bodies
+// app.use(bodyParser.urlencoded({ extended: false })); // To parse URL-encoded bodies
 
 // Enable cookies
 app.use(cookieParser());
@@ -53,10 +53,10 @@ mongoose
   .connect("mongodb://127.0.0.1:27017/portfolio", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    auth: {
-      username: 'root',
-      password: 'root',
-    },
+    // auth: {
+    //   username: 'root',
+    //   password: 'root',
+    // },
   })
   .then(() => {
     console.log("Connected successfully to MongoDB");
