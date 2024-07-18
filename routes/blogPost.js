@@ -62,6 +62,10 @@ router.post(
     body("title").notEmpty().withMessage("Title is required").trim(),
     body("slug").notEmpty().withMessage("Slug is required").trim(),
     body("visible").notEmpty().withMessage("Visibility is required").trim(),
+    body("description")
+      .notEmpty()
+      .withMessage("Description is required")
+      .trim(),
     body("category")
       .notEmpty()
       .withMessage("Category is required")
@@ -104,7 +108,7 @@ router.post(
             req.files["content[][data]"] &&
             req.files["content[][data]"][imageIndex]
           ) {
-            data = req.files["content[][data]"][imageIndex].path;
+            data = `/uploads/${req.files["content[][data]"][imageIndex].filename}`;
             imageIndex++;
           } else {
             throw new Error("Image file is missing for some content item");
