@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- HEADER -->
+    <%- include('./partials/header') %>
+        <body class="flex">
+            <!-- sidebar -->
+            <%- include('./partials/sidebar') %>
+                <!-- main content -->
+                <div class="flex-1 p-6">
+                    <!-- NAVBAR -->
+                    <%- include('./partials/navbar',{currentPage:title}) %>
+                    <div class="my-4 max-w-screen-md border px-4 shadow-xl sm:mx-4 sm:rounded-xl sm:px-4 sm:py-4 md:mx-auto">
+                        <form action="/admin/edit-user-preferences/<%= user.username %>?_csrf=<%= csrfToken %>" method="post" enctype="multipart/form-data">
+                            <div class="flex flex-col border-b py-4 sm:flex-row sm:items-start">
+                                <div class="shrink-0 mr-auto sm:py-3">
+                                    <p class="font-medium">Account Settings</p>
+                                    <p class="text-sm text-gray-600">Edit your account settings</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-4 border-b py-4 sm:flex-row">
+                                <p class="shrink-0 w-32 font-medium">Username</p>
+                                <input placeholder="If you don't want to change username let it be empty" name="username" value="<%=user.username%>"
+                                    class="mb-2 w-full rounded-md border border-gray-300 bg-white px-2 py-2 outline-none ring-blue-600 sm:mr-4 sm:mb-0 focus:ring-1" />
+                            </div>
+                            <div class="flex flex-col gap-4 py-4  lg:flex-row">
+                                <div class="shrink-0 w-32  sm:py-4">
+                                    <p class="mb-auto font-medium">Avatar</p>
+                                    <p class="text-sm text-gray-600">Change your avatar</p>
+                                </div>
+                                <div
+                                    class="flex h-56 w-full flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-gray-300 p-5 text-center">
+                                    <img src="<%= user.profilePic %>" class="h-20 w-20 rounded-full" />
+                                    <p class="text-sm text-gray-600">You Can Change Your Profile Picture</p>
+                                    <input type="file" name="profile"
+                                        class="max-w-full rounded-lg px-2 font-medium text-blue-600 outline-none ring-blue-600 focus:ring-1" />
+                                </div>
+                            </div>
+                            <div class="flex justify-end py-4">
+                                <button type="submit"
+                                    class="rounded-lg border-2 border-transparent bg-blue-600 px-4 py-2 font-medium text-white focus:outline-none focus:ring hover:bg-blue-700">Save</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="my-4 max-w-screen-md border px-4 shadow-xl sm:mx-4 sm:rounded-xl sm:px-4 sm:py-4 md:mx-auto">
+                        <form action="/admin/edit-user-password/<%= user.username %>" method="post">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <div class="flex flex-col border-b py-4 sm:flex-row sm:items-start">
+                                <div class="shrink-0 mr-auto sm:py-3">
+                                    <p class="font-medium">Privacy Settings</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col border-b py-4 gap-4">
+                                <p class="shrink-0 w-32 font-medium">Change Password</p>
+                                <div class="flex flex-col">
+                                    <input placeholder="Current Password" name="currentPassword" type="password"
+                                        class="w-full rounded-md border border-gray-300 bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1" />
+                                </div>
+                                <div class="flex flex-col sm:flex-row gap-4 ">
+                                    <input placeholder="New Password" name="password" type="password"
+                                        class="w-full rounded-md border border-gray-300 bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1" />
+                                    <input placeholder="Confirm New Password" name="confirm" type="password"
+                                        class="w-full rounded-md border border-gray-300 bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1" />
+                                </div>
+                            </div>
+                            <div class="flex justify-end py-4">
+                                <button type="submit"
+                                    class="rounded-lg border-2 border-transparent bg-blue-600 px-4 py-2 font-medium text-white focus:outline-none focus:ring hover:bg-blue-700">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script type="text/javascript">
+                    "<% if(messages.error?.length > 0){ %>"
+                    Swal.fire({
+                        title: 'Error!',
+                        text: "<%= messages.error[0].msg %>",
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    "<% } %>"
+                </script>  
+                <script type="text/javascript">
+                    "<% if(messages.success){ %>"
+                    Swal.fire({
+                        title: 'Success',
+                        text: "<%= messages.success %>",
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                    "<% } %>"
+                </script>
+        </body>
+</html>
+
+
+
+

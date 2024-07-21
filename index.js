@@ -9,37 +9,28 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const csrf = require("csurf");
-const upload = require('./config/multerconfig');  // Import the multer configuration
-
+const upload = require("./config/multerconfig"); // Import the multer configuration
 
 const app = express();
 const port = 3000;
 
-app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
-// app.use(bodyParser.urlencoded({ extended: false })); // To parse URL-encoded bodies
-
-// Enable cookies
-app.use(cookieParser());
+app
+  .use(express.urlencoded({ extended: true }))
+  .use(cookieParser())
+  .use(
+    session({
+      secret: "my_secret_key",
+      resave: false,
+      saveUninitialized: false,
+    })
+  )
+  .use(passport.initialize())
+  .use(passport.session())
+  .use(csrf({ cookie: true }))
+  .use(flash()); // To parse URL-encoded bodies - Enable cookies - Session - Init Passport - Use Passport Session - Initialize CSRF protection middleware - Initialize connect-flash middleware
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
-app.use(
-  session({
-    secret: "my_secret_key",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Initialize CSRF protection middleware
-app.use(csrf({ cookie: true }));
-
-// Initialize connect-flash middleware after session
-app.use(flash());
 
 app.use((req, res, next) => {
   // Middleware to make flash messages available in templates

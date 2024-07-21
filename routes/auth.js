@@ -23,9 +23,15 @@ router.post(
         }
       }),
     body("password")
+      .notEmpty()
       .trim()
       .isLength({ min: 8 })
       .withMessage("Password must be at least 8 characters long"),
+    // body("confirm")
+    //   .exists({ checkFalsy: true })
+    //   .withMessage("You must type a confirmation password")
+    //   .custom((value, { req }) => value === req.body.password)
+    //   .withMessage("The passwords do not match"),
   ],
   async (req, res) => {
     const errors = validationResult(req);
