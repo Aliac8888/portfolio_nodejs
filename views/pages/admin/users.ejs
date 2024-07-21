@@ -33,7 +33,7 @@
                                     </th>
                                     <th scope="col"
                                         class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize">
-                                        Username
+                                        name
                                     </th>
                                     <th scope="col"
                                         class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize">
@@ -147,10 +147,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
                                                 <!-- EDIT USER MODAL -->
+
                                                 <!-- DELETE USER MODAL -->
                                                 <button data-modal-target="delete-user-<%= user.username %>"
                                                     data-modal-toggle="delete-user-<%= user.username %>" type="button"
@@ -218,7 +216,6 @@
                                                     </div>
                                                 </div>
                                                 <!-- DELETE USER MODAL -->
-
                                             </div>
                                         </td>
                                     </tr>
@@ -228,6 +225,27 @@
                     </div>
             </div>
             <script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script type="text/javascript">
+                "<% if(messages.error?.length > 0){ %>"
+                Swal.fire({
+                    title: 'Error!',
+                    text: "<%- messages.error[0] %>",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                "<% } %>"
+            </script>
+            <script type="text/javascript">
+                "<% if(messages.success){ %>"
+                Swal.fire({
+                    title: 'Success',
+                    text: "<%= messages.success %>",
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+                "<% } %>"
+            </script>
     </body>
 
 </html>
