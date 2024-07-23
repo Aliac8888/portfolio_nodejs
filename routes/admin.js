@@ -148,27 +148,5 @@ router.post(
   }
 );
 
-router.get("/user-management", async (req, res, next) => {
-  try {
-    const users = await User.find();
-    res.render("pages/admin/users", {
-      title: "User Management",
-      users,
-    });
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-});
-
-router.post("/delete-user/:id", async (req, res, next) => {
-  try {
-    await User.findByIdAndDelete(req.params.id);
-    res.redirect("/admin/user-management");
-  } catch (error) {
-    console.log(error);
-    res.redirect("/admin/user-management");
-  }
-});
 
 module.exports = router;

@@ -12,16 +12,7 @@
                 <!-- NAVBAR -->
                 <%- include('./partials/navbar',{currentPage:title}) %>
                     <div class="relative text-gray-500 focus-within:text-gray-900 mb-4">
-                        <div class="absolute inset-y-0 left-1 flex items-center pl-3 pointer-events-none">
-                            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M17.5 17.5L15.4167 15.4167M15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333C11.0005 15.8333 12.6614 15.0929 13.8667 13.8947C15.0814 12.6872 15.8333 11.0147 15.8333 9.16667Z"
-                                    stroke="#9CA3AF" stroke-width="1.6" stroke-linecap="round" />
-                            </svg>
-                        </div>
-                        <input type="text" id="default-search"
-                            class="w-80 h-11 pr-5 pl-12 py-2.5 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none"
-                            placeholder="Search for company">
+                        
                         <!-- NEW BLOG CATEGORY MODAL -->
                         <button data-modal-target="new-blog-category"
                             class="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 border-b-4 border-blue-900 hover:border-blue-600 rounded float-right"
@@ -108,7 +99,7 @@
                                         <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"><%= blogCategory.usageCount %></td>
                                         <td class="p-5">
                                             <div class="flex items-center gap-1">
-                                                <!-- EDIT USER MODAL -->
+                                                <!-- EDIT Blog Category MODAL -->
                                                 <button data-modal-target="edit-blog-category-<%=blogCategory._id%>"
                                                     class="p-2 rounded-full group transition-all duration-500 flex item-center"
                                                     data-modal-toggle="edit-blog-category-<%=blogCategory._id%>" type="button">
@@ -166,9 +157,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- EDIT USER MODAL -->
+                                                <!-- EDIT Blog Category MODAL -->
 
-                                                <!-- DELETE USER MODAL -->
+                                                <!-- DELETE Blog Category MODAL -->
                                                 <button data-modal-target="delete-category-<%= blogCategory.name %>" data-modal-toggle="delete-category-<%= blogCategory.name %>"
                                                     type="button" class="p-2 rounded-full group transition-all duration-500 flex item-center">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -216,7 +207,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- DELETE USER MODAL -->
+                                                <!-- DELETE Blog Category MODAL -->
                                             </div>
                                         </td>
                                     </tr>

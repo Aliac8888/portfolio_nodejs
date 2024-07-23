@@ -26,8 +26,6 @@ router.get("/blogs", async (req, res) => {
 // Create a new blog post page
 router.get("/create-blog-post", async (req, res) => {
   const categories = await BlogCategory.find();
-  const csrfToken = req.csrfToken();
-  console.log("CSRF Token for create-blog-post (server):", csrfToken); // Debugging
   res.render("pages/admin/create_blog_post", {
     errors: [],
     title: "Create Blog Post",
@@ -202,9 +200,11 @@ router.post(
 router.post("/delete-blog-post/:id", async (req, res) => {
   try {
     await BlogPost.findByIdAndDelete(req.params.id);
+    req.flash("success", "Blog Post Deleted Successfully");
     res.redirect("/admin/blogs");
   } catch (err) {
     console.log(err);
+    req.flash("error",["Unknown Error"]);
     res.redirect("/admin/blogs");
   }
 });

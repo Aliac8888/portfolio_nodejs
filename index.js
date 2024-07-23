@@ -65,6 +65,16 @@ const ensureAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
+  req.flash("error", ["This Route Is Only Accessible by Authenticated Users"]);
+  res.redirect("/login");
+};
+
+// middleware to check user privileges
+const ensureAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.level === 1) {
+    return next();
+  }
+  req.flash("error", ["This Route Is Only Accessible by Admins"]);
   res.redirect("/login");
 };
 
@@ -79,8 +89,9 @@ app.use((req, res, next) => {
 app.use("/", require("./routes/main"));
 app.use("/", require("./routes/auth"));
 app.use("/admin", ensureAuthenticated, require("./routes/admin"));
-app.use("/admin", ensureAuthenticated, require("./routes/blogPost"));
-app.use("/admin", ensureAuthenticated, require("./routes/blogCategory"));
+app.use("/admin", ensureAdmin, require("./routes/userManagement"));
+app.use("/admin", ensureAdmin, require("./routes/blogPost"));
+app.use("/admin", ensureAdmin, require("./routes/blogCategory"));
 
 // Catch-all route to handle 404 errors
 app.use((req, res, next) => {

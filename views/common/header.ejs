@@ -91,8 +91,24 @@
                 <li class="text-gray-200 md:mr-12 text-lg hover:text-blue-600"><a href="/blogs">Blogs</a></li>
                 <li class="text-gray-200 md:mr-12 text-lg hover:text-blue-600"><a href="/resume">Resume</a></li>
                 <li class=" md:mr-12">
-                    <a href="/login"
-                        class="text-white bg-dark-blue hover:bg-dark-blue-light focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</a>
+                    <% if(typeof user !='undefined' && user){ %>
+                        <div class="flex lg:flex-1 lg:justify-end">
+                            <a href="/admin"
+                                class="text-white bg-dark-blue hover:bg-dark-blue-light focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-3
+                                 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Dashboard</a>
+                            <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit()"
+                                class="text-white bg-red-700 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5
+                                 focus:outline-none dark:focus:ring-red-800">Logout</a>
+                            <form action="/logout" method="post" id="logout-form">
+                                <!-- CSRF TOKEN -->
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <!-- CSRF TOKEN -->
+                            </form>
+                        </div>
+                    <% }else{ %>
+                            <a href="/login"
+                                class="text-white bg-dark-blue hover:bg-dark-blue-light focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</a>
+                    <% } %>
                 </li>
             </ul>
         </nav>
