@@ -20,7 +20,7 @@
             <!--header-->
             <%- include('../common/header'); -%>
                 <!--header-->
-                <div class="flex justify-between px-4 mx-auto max-w-screen-xl relative z-10 my-32">
+                <div class="flex justify-between px-4 mx-auto max-w-screen-xl relative z-10 my-16">
                     <article
                         class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
                         <header class="mb-4 lg:mb-6 not-format">
@@ -581,12 +581,12 @@
                     </article>
                 </div>
     </div>
+    <% relatedBlogPosts?.forEach(relatedBlogPost=>{ %>
     <aside aria-label="Related articles" class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800 relative z-10">
         <div class="px-4 mx-auto max-w-screen-xl">
             <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white px-28 md:px-36 lg:px-0">Related Blog Posts
             </h2>
             <div class="grid gap-12 lg:grid-cols-4 px-20 md:px-36 lg:px-0">
-                <% relatedBlogPosts?.forEach(relatedBlogPost=>{ %>
                     <article class="max-w-xs">
                         <a href="/blogs/<%= relatedBlogPost.slug %>">
                             <img src="<%= relatedBlogPost.templateImage %>" class="mb-5 rounded-lg w-full h-48"
@@ -606,10 +606,10 @@
                             Read This Post
                         </a>
                     </article>
-                    <%})%>
             </div>
         </div>
     </aside>
+    <%})%>
 
     <section class="bg-white dark:bg-gray-900 relative z-10">
         <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">

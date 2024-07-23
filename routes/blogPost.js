@@ -4,6 +4,8 @@ const BlogPost = require("../models/BlogPost");
 const BlogCategory = require("../models/BlogCategory");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
+const fs = require('fs');
+const path = require("path");
 const upload = require("../config/multerconfig"); // Import the multer configuration
 
 // Read all blog posts
@@ -106,7 +108,7 @@ router.post(
             req.files["content[][data]"] &&
             req.files["content[][data]"][imageIndex]
           ) {
-            data = `/uploads/${req.files["content[][data]"][imageIndex].filename}`;
+            data = `/uploads/blogs/${slug}/images/${req.files["content[][data]"][imageIndex].filename}`;
             imageIndex++;
           } else {
             throw new Error("Image file is missing for some content item");
@@ -129,7 +131,7 @@ router.post(
         visible: visible,
         content: contentArray,
         templateImage: req.files.templateImage
-          ? `/uploads/${req.files.templateImage[0].filename}`
+          ? `/uploads/blogs/${slug}/images/template/${req.files.templateImage[0].filename}`
           : "",
         author: req.user._id,
         category: category,
@@ -199,7 +201,20 @@ router.post(
 // Delete a blog post
 router.post("/delete-blog-post/:id", async (req, res) => {
   try {
-    await BlogPost.findByIdAndDelete(req.params.id);
+    const blogPost = await BlogPost.findById(req.params.id);
+    const blogDir = path.join(
+      __dirname,
+      "..",
+      "public",
+      "uploads",
+      "blogs",
+      blogPost.slug
+    );
+    if (fs.existsSync(blogDir)) {
+      fs.rmSync(blogDir, { recursive: true, force: true });
+    }
+    await blogPost.deleteOne();
+    
     req.flash("success", "Blog Post Deleted Successfully");
     res.redirect("/admin/blogs");
   } catch (err) {
