@@ -2097,10 +2097,6 @@ input:checked + .toggle-bg {
   margin-top: 0.5rem;
 }
 
-.mt-24 {
-  margin-top: 6rem;
-}
-
 .mt-28 {
   margin-top: 7rem;
 }
@@ -2228,14 +2224,6 @@ input:checked + .toggle-bg {
 
 .h-\[calc\(100\%-1rem\)\] {
   height: calc(100% - 1rem);
-}
-
-.h-full {
-  height: 100%;
-}
-
-.h-screen {
-  height: 100vh;
 }
 
 .max-h-0 {

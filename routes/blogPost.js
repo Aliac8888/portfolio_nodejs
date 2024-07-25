@@ -4,7 +4,7 @@ const BlogPost = require("../models/BlogPost");
 const BlogCategory = require("../models/BlogCategory");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
-const fs = require('fs');
+const fs = require("fs");
 const path = require("path");
 const upload = require("../config/multerconfig"); // Import the multer configuration
 
@@ -43,6 +43,7 @@ router.get("/edit-blog-post/:id", async (req, res) => {
     res.render("pages/admin/edit_blog_post", {
       blogPost,
       categories,
+      title: "Edit Blog Post",
       errors: [],
     });
   } catch (err) {
@@ -138,6 +139,7 @@ router.post(
       });
 
       await blogPost.save();
+      req.flash("success", "Successfully Created the blog post");
       res.redirect("/admin/blogs");
     } catch (err) {
       console.log(err);
@@ -155,45 +157,95 @@ router.post(
 // edit a blog post in db
 router.post(
   "/edit-blog-post/:id",
-  upload.single("templateImage"),
+  upload.fields([
+    { name: "templateImage", maxCount: 1 },
+    { name: "content[][data]", maxCount: 10 }, // Adjust maxCount as needed
+  ]),
   [
     body("title").notEmpty().withMessage("Title is required").trim(),
-    body("content").notEmpty().withMessage("Content is required").trim(),
-    body("category").notEmpty().withMessage("Category is required"),
+    body("slug").notEmpty().withMessage("Slug is required").trim(),
+    body("visible").notEmpty().withMessage("Visibility is required").trim(),
+    body("description")
+      .notEmpty()
+      .withMessage("Description is required")
+      .trim(),
+    body("category")
+      .notEmpty()
+      .withMessage("Category is required")
+      .custom((value) => value !== "none")
+      .withMessage("Please select a valid category"),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const blogPost = { _id: req.params.id, ...req.body };
-      const categories = await BlogCategory.find();
-      return res.render("pages/admin/edit_blog_post", {
-        blogPost,
-        categories,
-        errors: errors.array(),
-        title: "Edit Blog Post",
-      });
+      req.flash("error", errors.array());
+      return res.redirect(`admin/edit-blog-post/${req.params.id}`);
     }
 
     try {
-      const { title, content, category } = req.body;
-      const contentArray = JSON.parse(content);
+      const { title, category, slug, visible, description } = req.body;
+      // Reconstruct content array
+      const contentArray = [];
+      const contentTypes = Array.isArray(req.body["content[][type]"])
+        ? req.body["content[][type]"]
+        : [req.body["content[][type]"]];
+      const contentData = Array.isArray(req.body["content[][data]"])
+        ? req.body["content[][data]"]
+        : [req.body["content[][data]"]];
+      const contentPriorities = Array.isArray(req.body["content[][priority]"])
+        ? req.body["content[][priority]"]
+        : [req.body["content[][priority]"]];
 
-      const updateData = {
-        title,
-        content: contentArray,
-        updatedAt: Date.now(),
-        category,
-      };
+      let imageIndex = 0;
+      let contentIndex = 0;
 
-      if (req.file) {
-        updateData.templateImage = `/uploads/${req.file.filename}`;
+      for (let i = 0; i < contentTypes.length; i++) {
+        let data;
+        if (contentTypes[i] === "image") {
+          if (
+            req.files["content[][data]"] &&
+            req.files["content[][data]"][imageIndex]
+          ) {
+            data = `/uploads/blogs/${slug}/images/${req.files["content[][data]"][imageIndex].filename}`;
+            imageIndex++;
+          } else {
+            throw new Error("Image file is missing for some content item");
+          }
+        } else {
+          data = contentData[contentIndex];
+          contentIndex++;
+        }
+        contentArray.push({
+          type: contentTypes[i],
+          data: data,
+          priority: contentPriorities[i],
+        });
       }
 
-      await BlogPost.findByIdAndUpdate(req.params.id, updateData);
+      const blogPost = await BlogPost.findByIdAndUpdate(req.params.id, {
+        title: title,
+        slug: slug,
+        description: description,
+        visible: visible,
+        content: contentArray,
+        templateImage: req.files.templateImage
+          ? `/uploads/blogs/${slug}/images/template/${req.files.templateImage[0].filename}`
+          : "",
+        author: req.user._id,
+        category: category,
+      });
+
+      req.flash("success", "Successfully updated the blog post");
       res.redirect("/admin/blogs");
     } catch (err) {
       console.log(err);
-      res.redirect("/admin/blogs");
+      const categories = await BlogCategory.find();
+      res.render("pages/admin/create_blog_post", {
+        messages: { error: [err.message] },
+        title: "Create Blog Post",
+        categories,
+        csrfToken: req.csrfToken(),
+      });
     }
   }
 );
@@ -214,12 +266,12 @@ router.post("/delete-blog-post/:id", async (req, res) => {
       fs.rmSync(blogDir, { recursive: true, force: true });
     }
     await blogPost.deleteOne();
-    
+
     req.flash("success", "Blog Post Deleted Successfully");
     res.redirect("/admin/blogs");
   } catch (err) {
     console.log(err);
-    req.flash("error",["Unknown Error"]);
+    req.flash("error", ["Unknown Error"]);
     res.redirect("/admin/blogs");
   }
 });

@@ -1,37 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Blog Post</title>
-</head>
+<!-- HEADER -->
+<%- include('./partials/header') %>
 
-<body>
-    <h1>Edit Blog Post</h1>
-    <form action="/admin/edit-blog-post/<%= blogPost._id %>?_csrf=<%= csrfToken %>" method="POST" enctype="multipart/form-data">
-        <label for="title">Title:</label>
-        <input type="text" name="title" id="title" value="<%= blogPost.title %>" required><br>
+    <body class="flex">
+        <!-- sidebar -->
+        <%- include('./partials/sidebar') %>
+            <!-- main content -->
+            <div class="flex-1 p-6">
+                <!-- NAVBAR -->
+                <%- include('./partials/navbar',{currentPage:title}) %>
+                    <form action="/admin/edit-blog-post/<%= blogPost._id %>?_csrf=<%= csrfToken %>" method="post"
+                        enctype="multipart/form-data" id="fffff">
+                        <div class="space-y-12">
+                            <div class="border-b border-gray-900/10 pb-4">
+                                <h2 class="text-lg font-bold leading-7 text-gray-900">New Blog Post</h2>
+                                <div class="mt-10 grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-8" id="input-container">
+                                    <div class="md:col-span-3">
+                                        <label for="title"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Title</label>
+                                        <div class="mt-2">
+                                            <input type="text" name="title" id="title" placeholder="Title of Blog Post"
+                                                autocomplete="title" required value="<%= blogPost.title %>"
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="slug" class="block text-lg font-medium leading-6 text-gray-900">Slug
+                                            (Must be Unique)</label>
+                                        <div class="mt-2">
+                                            <input type="text" name="slug" id="slug" placeholder="Title of Blog Post"
+                                                autocomplete="slug" required value="<%= blogPost.slug %>"
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="category"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Category</label>
+                                        <div class="mt-2">
+                                            <select type="text" name="category" id="category" required
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                                <option value="none">No Category Selected</option>
+                                                <% categories.forEach(category=> { %>
+                                                    <option value="<%= category._id %>" <%= (category._id.toString()===blogPost.category.toString()) ? "selected" : "" %> >
+                                                        <%= category.name %>
+                                                    </option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="visible"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Visibility</label>
+                                        <div class="mt-2">
+                                            <select type="text" name="visible" id="visible" required
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                                <option value="0">Hidden</option>
+                                                <option <%= ( blogPost.visible == 1 ) ? "selected" : "" %> value="1">Shown</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="description"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Description</label>
+                                        <div class="mt-2">
+                                            <textarea id="description" name="description" rows="3" required
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
+                                                focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"><%= blogPost.description %></textarea>
+                                        </div>
 
-        <label for="category">Category:</label>
-        <select name="category" id="category" required>
-            <% categories.forEach(category=> { %>
-                <option <%= blogPost.category.toString() === category._id.toString() ? 'selected' : '' %> ><%= category.name %> value="<%= category._id %>">
-                </option>
-            <% }) %>
-        </select><br>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <div class="md:col-span-3">
+                                        <label for="templateImage"
+                                            class="block text-lg font-medium leading-6 text-gray-900">Cover
+                                            photo</label>
+                                        <div class="mt-2">
+                                            <input type="file" name="templateImage" id="templateImage"
+                                                autocomplete="templateImage" required
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700 sm:text-sm sm:leading-6">
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-3"></div>
+                                    <% blogPost.content.forEach(contentData =>{ %>
+                                        <% if(contentData.type === "text"){ %>
+                                        <div class="md:col-span-3">
+                                            <div>
+                                                <input value="text" type="hidden" name="content[][type]">
+                                                <label class="block text-lg font-medium leading-6 text-gray-900">Content Data
+                                                    <textarea name="content[][data]" rows="3" required
+                                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
+                                                        focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"><%= contentData.data %></textarea>
+                                                </label>
+                                                <div>
+                                                    <div>
+                                                        <label class="block text-lg font-medium leading-6 text-gray-900">Priority
+                                                            <input type="number" name="content[][priority]" placeholder="Priority of Content" min="0" value="<%= contentData.priority %>" required
+                                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
+                                                                 placeholder:text-gray-400 focus:ring-2
+                                                                focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                        <% if(contentData.type==="image" ){ %>
+                                            <div class="md:col-span-3">
+                                                <div>
+                                                    <input value="image" type="hidden" name="content[][type]">
+                                                    <label class="block text-lg font-medium leading-6 text-gray-900">Content Data
+                                                        <input type="file" name="content[][data]" required
+                                                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
+                                                                                placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700 sm:text-sm sm:leading-6">
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-lg font-medium leading-6 text-gray-900">Priority
+                                                        <input type="number" name="content[][priority]" placeholder="Priority of Content" min="0" value="<%= contentData.priority %>"
+                                                         required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
+                                                                                    placeholder:text-gray-400 focus:ring-2
+                                                                                    focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                    <% }) %>
+                                    
+                                </div>
+                                
+                            </div>
+                            <div class="my-5">
+                                <button
+                                    class="rounded-md bg-green-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-green-400"
+                                    type="button" onclick="addContentItemTypeText()">Add Text Content</button>
+                                <button
+                                    class="rounded-md bg-yellow-500 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-yellow-400"
+                                    type="button" onclick="addContentItemTypeImage()">Add Image Content</button>
+                            </div>
+                        </div>
 
-        <label for="templateImage">Template Image:</label>
-        <input type="file" name="templateImage" id="templateImage"><br>
-        <% if (blogPost.templateImage) { %>
-            <img src="<%= blogPost.templateImage %>" alt="Template Image" width="200"><br>
-            <% } %>
+                        <div class="mt-6 flex items-center justify-end gap-x-6">
+                            <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+                            <button type="submit"
+                                class="rounded-md bg-blue-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Create</button>
+                        </div>
+                    </form>
+            </div>
+            <script>
+                function addContentItemTypeText() {
+                    const container = document.getElementById('input-container');
+                    const contentItem = document.createElement('div');
+                    contentItem.classList.add("md:col-span-3");
+                    contentItem.innerHTML = `
+                        <div>
+                            <input value="text" type="hidden" name="content[][type]">
+                            <label class="block text-lg font-medium leading-6 text-gray-900">Content Data
+                                <textarea name="content[][data]" rows="3" required
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
+                                    focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"></textarea>
+                            </label>
+                        <div>
+                        <div>
+                            <label class="block text-lg font-medium leading-6 text-gray-900">Priority
+                                <input type="number" name="content[][priority]" placeholder="Priority of Content" min="0" required
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
+                                    placeholder:text-gray-400 focus:ring-2
+                                    focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                            </label>
+                        </div>
+                    `;
+                    container.appendChild(contentItem);
+                }
 
-                <label for="content">Content:</label>
-                <textarea name="content" id="content" required><%= JSON.stringify(blogPost.content) %></textarea><br>
+                function addContentItemTypeImage() {
+                    const container = document.getElementById('input-container');
+                    const contentItem = document.createElement('div');
+                    contentItem.classList.add("md:col-span-3");
+                    contentItem.innerHTML = `
+                        <div>
+                            <input value="image" type="hidden" name="content[][type]">
+                            <label class="block text-lg font-medium leading-6 text-gray-900">Content Data
+                                <input type="file" name="content[][data]" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
+                                placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700 sm:text-sm sm:leading-6">
+                            </label>
+                        </div>
+                        <div>
+                            <label class="block text-lg font-medium leading-6 text-gray-900">Priority
+                                <input type="number" name="content[][priority]" placeholder="Priority of Content" min="0" required
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-lg ring-1 ring-inset ring-gray-300
+                                    placeholder:text-gray-400 focus:ring-2
+                                    focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                            </label>
+                        </div>
+                    `;
+                    container.appendChild(contentItem);
+                }
 
-                <button type="submit">Update</button>
-    </form>
-</body>
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script type="text/javascript">
+                "<% if(messages.error?.length > 0){ %>"
+                Swal.fire({
+                    title: 'Error!',
+                    text: "<%- messages.error[0] %>",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                "<% } %>"
+            </script>
+    </body>
 
 </html>
