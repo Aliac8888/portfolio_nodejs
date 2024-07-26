@@ -10,13 +10,29 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/blogs", async (req, res, next) => {
-  const blogPosts = await BlogPost.find({ visible: true })
-    .populate("author category")
-    .sort({ createdAt: -1 });
-  res.render("pages/blogs", {
-    title: "aliac - blog",
-    blogPosts,
-  });
+  const page = parseInt(req.query.page) || 1; // default to page 1 if not provided
+  const limit = parseInt(req.query.limit) || 8; // default to 8 posts per page if not provided
+
+  try {
+    const blogPosts = await BlogPost.find({ visible: true })
+      .populate("author category")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const totalPosts = await BlogPost.countDocuments({ visible: true });
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    res.render("pages/blogs", {
+      title: "aliac - blog",
+      blogPosts,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get("/blogs/:slug", async (req, res, next) => {

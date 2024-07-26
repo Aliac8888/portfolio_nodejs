@@ -8,6 +8,7 @@
         <%= title %>
     </title>
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/blog_images.css">
     <link rel="stylesheet" href="/assets/css/background_animation.css">
     <link type="image/png" sizes="64x64" rel="icon" href="/assets/img/user.png">
 </head>
@@ -16,21 +17,22 @@
     <div class="min-h-screen">
         <!--Start Of Background Animation Body-->
         <%- include('../common/box_animation'); -%>
-            <!--End Of Background Animation Body-->
-            <!--header-->
-            <%- include('../common/header'); -%>
-                <!--header-->
+        <!--End Of Background Animation Body-->
+        <!--header-->
+        <%- include('../common/header'); -%>
+        <!--header-->
                 <div class="container mx-auto py-10 relative z-10">
-                    <ul class="grid grid-cols-1 xl:grid-cols-4 gap-y-10 gap-x-6 items-start p-8">
+                    <ul class="grid grid-cols-1 xl:grid-cols-4 gap-y-10 gap-x-6 items-start p-16">
                         <% blogPosts.forEach(blogPost=>{ %>
                             <li class="flex flex-col sm:flex-row xl:flex-col items-start">
                                 <div class="order-1 sm:ml-6 xl:ml-0 max-w-full">
                                     <h3 class="mb-1 text-white font-semibold">
-                                        <span class="mb-1 block text-sm leading-6 text-blue-600">
+                                        <span class="my-2 block text-sm leading-6 text-blue-600">
                                             <%= blogPost.title %>
                                         </span>
                                     </h3>
-                                    <div class="prose prose-slate prose-sm text-slate-400 min-h-[4.5em] max-h-[4.5em] overflow-hidden break-words">
+                                    <div
+                                        class="prose prose-slate prose-sm text-slate-400 min-h-[4.5em] max-h-[4.5em] overflow-hidden break-words">
                                         <p>
                                             <%=blogPost.description%>
                                         </p>
@@ -41,17 +43,72 @@
                                             width="3" height="6" viewBox="0 0 3 6" fill="none" stroke="currentColor"
                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M0 0L3 3L0 6"></path>
-                                        </svg></a>
+                                        </svg>
+                                    </a>
                                 </div>
-                                <img src="<%= blogPost.templateImage %>" alt=""
-                                    class="mb-6 shadow-md rounded-lg bg-slate-50 w-full h-48 sm:w-[17rem] sm:mb-0 xl:mb-6 xl:w-full"
-                                    width="1216" height="640">
+                                <div class="image-container">
+                                    <img src="<%= blogPost.templateImage %>" alt="<%= blogPost.title %>"
+                                        class="shadow-md rounded-lg bg-slate-50 w-full h-48 sm:w-[17rem] sm:mb-0 xl:mb-6 xl:w-full img" width="1216"
+                                        height="640">
+                                    <div class="spinner-wrapper">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </div>
                             </li>
                             <%})%>
                     </ul>
+
+                    <!-- Pagination controls -->
+                    <div class="flex justify-center mt-8">
+                        <% if (currentPage> 1) { %>
+                            <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>"
+                                class="px-4 py-2 mx-1 bg-gray-200 text-black rounded hover:bg-gray-300">Previous</a>
+                        <% } %>
+                        <% for (let i=1; i <=totalPages; i++) { %>
+                            <a href="?page=<%= i %>&limit=<%= limit %>"
+                            class="px-4 py-2 mx-1 <%= i === currentPage ? 'bg-dark-blue text-white' : 'bg-gray-200 text-black hover:bg-gray-300' %> rounded">
+                        <%= i %>
+                            </a>
+                        <% } %>
+                        <% if (currentPage < totalPages) { %>
+                            <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>"
+                            class="px-4 py-2 mx-1 bg-gray-200 text-black rounded hover:bg-gray-300">Next</a>
+                        <% } %>
                 </div>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                const images = document.querySelectorAll(".image-container img");
+                images.forEach(image => {
+                    image.onload = function () {
+                        const container = image.parentElement;
+                        container.classList.add("loaded");
+                        const spinnerWrapper = container.querySelector(".spinner-wrapper");
+                        if (spinnerWrapper) {
+                            spinnerWrapper.remove();
+                        }
+                    };
+
+                    image.onerror = function () {
+                        const container = image.parentElement;
+                        const spinnerWrapper = container.querySelector(".spinner-wrapper");
+                        if (spinnerWrapper) {
+                            spinnerWrapper.innerHTML = "Failed to load image";
+                        }
+                    };
+
+                    // Fallback for images that might not fire onload or onerror
+                    setTimeout(() => {
+                        if (!image.complete) {
+                            image.onerror();
+                        } else {
+                            image.onload();
+                        }
+                    }, 1000); // 5 seconds timeout
+                });
+            });
+    </script>
 </body>
 
 
